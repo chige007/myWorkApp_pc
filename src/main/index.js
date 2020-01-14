@@ -1,5 +1,6 @@
-import { app, BrowserWindow } from 'electron'
-import {app, BrowserWindow, ipcMain} from 'electron'
+import { app, BrowserWindow, ipcMain, dialog } from 'electron'
+const Store = require('electron-store');
+const store = new Store();
 
 /**
  * Set `__static` path to static files in production
@@ -14,7 +15,9 @@ const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080`
   : `file://${__dirname}/index.html`
 
-function createWindow () {
+console.log(app.getPath('userData'));
+
+function createWindow() {
   /**
    * Initial window options
    */
@@ -33,6 +36,48 @@ function createWindow () {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+
+  init();
+}
+
+function init () {
+  ipcMain.on('get-websites', (event, websiteClass) => {
+    let websites = store.get('websites')
+    event.sender.send('get-websites', websites);
+  })
+
+  ipcMain.on('save-website-class', (event, websiteClass) => {
+    let websites = store.get('websites')
+    if (!websites) {
+      websites = [websiteClass]
+    } else {
+      websites.push(websiteClass)
+    }
+    store.set('websites', websites)
+    event.sender.send('save-website-class-success', websites);
+  })
+
+  ipcMain.on('upload-website-icon', (event) => {
+    dialog.showOpenDialog({
+      properties: ['openFile'],
+      filters: [{
+        name: 'Images',
+        extensions: ['jpg', 'png', 'gif', 'jpeg']
+      }]
+    }, path => {
+      event.sender.send('upload-website-icon-success', path);
+    })
+  })
+
+  ipcMain.on('save-website', (event, classId, website) => {
+    let websites = store.get('websites')
+    let myWebsiteClass = websites.find(item => {
+      return item.id === classId
+    })
+    myWebsiteClass.websites.push(website)
+    store.set('websites', websites)
+    event.sender.send('save-website-success', websites)
+  })
 }
 
 app.on('ready', createWindow)
@@ -48,7 +93,6 @@ app.on('activate', () => {
     createWindow()
   }
 })
-
 /**
  * Auto Updater
  *

@@ -4,11 +4,14 @@
     height: 100%;
     .header{
         line-height: 60px;
+        box-shadow: 0px 1px 2px #ddd;
         .logo{
             display: inline-block;
             img{
                 vertical-align: middle;
                 top: -3px;
+                width: 35px;
+                height: 35px;
             }
             span{
                 display: inline-block;
@@ -24,20 +27,26 @@
         padding: 20px 0px;
         .websiteClass{
             margin-bottom: 20px;
+            border-bottom: 1px dashed #ddd;
             .title{
                 color: #444;
                 font-size: 16px;
-                i{
+                height: 40px;
+                line-height: 40px;
+                .icon{
                     margin-right: 4px;
-                    font-size: 18px;
+                    font-size: 20px;
                     color: @primary;
+                }
+                .optBts{
+                    float: right;
                 }
             }
             .websiteList{
                 padding: 20px 0px;
                 .website{
                     text-align: center;
-                    padding: 15px 0px;
+                    padding: 15px 10px;
                     .icon{
                         width: 50px;
                         height: 50px;
@@ -58,7 +67,7 @@
                             transform: translateY(-4px);
                         }
                         p{
-                            color: #444;
+                            color: @primary;
                         }
                     }
                 }
@@ -95,6 +104,10 @@
         color: #666;
         border: 1px dashed #ccc;
         border-radius: 4px;
+        img{
+            height: 100%;
+            width: 100%;
+        }
         &:hover{
             color: @primary;
             border-color: @primary;

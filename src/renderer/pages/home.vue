@@ -15,11 +15,11 @@
             <el-main>
                 <el-button-group>
                     <el-button
-                        size="small"
+                        size="medium"
                         icon="el-icon-plus"
                         @click="addClassDialogVisible = true">新增分类</el-button>
-                    <el-button size="small" icon="el-icon-refresh">同步数据</el-button>
-                    <el-button size="small" icon="el-icon-delete">批量删除</el-button>
+                    <el-button size="medium" icon="el-icon-refresh">同步数据</el-button>
+                    <el-button size="medium" icon="el-icon-delete">批量删除</el-button>
                 </el-button-group>
                 <div class="websiteClassList">
                     <div
@@ -27,18 +27,23 @@
                         v-for="(x, index_x) in websiteList"
                         :key="index_x">
                         <div class="title">
-                            <i class="el-icon-menu"></i>
+                            <i class="icon el-icon-s-flag"></i>
                             <span>{{x.name}}</span>
+                            <div class="optBts">
+                                <el-button size="small" icon="el-icon-edit" circle></el-button>
+                                <el-button size="small" icon="el-icon-delete" circle></el-button>
+                            </div>
                         </div>
                         <el-row class="websiteList">
-                            <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="2" class="website" v-for="index_y in x.websites" :key="index_y">
+                            <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="2" class="website" v-for="(y, index_y) in x.websites" :key="index_y">
                                 <div>
-                                    <img class="icon" :src="y.icon || './../assets/logo.png'" alt="icon">
-                                    <p>y.name</p>
+                                    <!-- <img class="icon" :src="y.icon ? 'file://' + y.icon : './../assets/logo.png'" alt="icon"> -->
+                                    <img class="icon" src="./../assets/logo.png" alt="icon">
+                                    <p>{{y.name}}</p>
                                 </div>
                             </el-col>
                             <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="2" class="website-addBtn-wrap">
-                                <div class="website-addBtn" @click="openAddWebsiteDialog">
+                                <div class="website-addBtn" @click="openAddWebsiteDialog(x.id)">
                                     <i class="el-icon-plus"></i>
                                 </div>
                             </el-col>
@@ -68,7 +73,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="closeAddClassDialog">取 消</el-button>
-            <el-button type="primary" @click="addClass">确 定</el-button>
+            <el-button type="primary" @click="saveWebsiteClass">确 定</el-button>
         </div>
     </el-dialog>
 
@@ -78,16 +83,16 @@
         :visible.sync="addWebsiteDialogVisible"
         width="480px">
         <el-form
-            ref="addClassForm"
+            ref="addWebsiteForm"
             label-width="70px"
             style="padding: 10px 20px;"
             :rules="addWebsiteFormRules"
             :model="addWebsiteFormData">
             <el-form-item label="图标：" prop="icon">
                 <div class="myUploadBtn" @click="uploadWebsiteIcon">
-                    <i class="el-icon-upload"></i>
+                    <i v-if="!addWebsiteFormData.icon" class="el-icon-upload"></i>
+                    <img v-else :src="'file://' + addWebsiteFormData.icon" alt="icon">
                 </div>
-                <input v-model="addWebsiteFormData.icon" type="hidden"/>
             </el-form-item>
             <el-form-item label="名称：" prop="name">
                 <el-input v-model="addWebsiteFormData.name"></el-input>
@@ -98,13 +103,15 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="closeAddWebsiteDialog">取 消</el-button>
-            <el-button type="primary" @click="addWebsite">确 定</el-button>
+            <el-button type="primary" @click="saveWebsite">确 定</el-button>
         </div>
     </el-dialog>
 </div>
 </template>
 
 <script>
+import { ipcRenderer } from 'electron'
+import uuidv1 from 'uuid/v1'
 export default {
     props: {},
     computed: {},
@@ -136,6 +143,7 @@ export default {
                 }]
             },
             addWebsiteFormData: {
+                id: '',
                 classId: '',
                 icon: '',
                 name: '',
@@ -148,23 +156,27 @@ export default {
     components: {},
     watch: {},
     methods: {
-        addClass() {
+        saveWebsiteClass() {
             this.$refs.addClassForm.validate((valid) => {
                 if (valid) {
-                    let dataObj = {
+                    let websiteClass = {
+                        id: uuidv1(),
                         name: this.addClassFormData.name,
                         websites: []
                     };
-                    this.websiteList.push(dataObj);
-                    this.$refs.addClassForm.resetFields();
-                    this.$refs.addClassForm.clearValidate();
-                    this.addClassDialogVisible = false;
-                    this.$message({
-                        type: 'success',
-                        message: '添加成功',
-                        center: true
-                    });
+                    ipcRenderer.send('save-website-class', websiteClass);
                 }
+            });
+        },
+        saveWebsiteClassSuccess(websites) {
+            this.websiteList = websites;
+            this.$refs.addClassForm.resetFields();
+            this.$refs.addClassForm.clearValidate();
+            this.addClassDialogVisible = false;
+            this.$message({
+                type: 'success',
+                message: '添加成功',
+                center: true
             });
         },
         closeAddClassDialog () {
@@ -172,20 +184,59 @@ export default {
             this.$refs.addClassForm.clearValidate();
             this.addClassDialogVisible = false;
         },
-        openAddWebsiteDialog () {
+        openAddWebsiteDialog (classId) {
+            this.addWebsiteFormData.classId = classId;
             this.addWebsiteDialogVisible = true;
         },
         closeAddWebsiteDialog () {
             this.addWebsiteDialogVisible = false;
         },
         uploadWebsiteIcon () {
-
+            ipcRenderer.send('upload-website-icon');
         },
-        addWebsite () {
-
-        }
+        saveWebsite () {
+            this.$refs.addWebsiteForm.validate((valid) => {
+                if (valid) {
+                    let website = {
+                        id: uuidv1(),
+                        name: this.addWebsiteFormData.name,
+                        url: this.addWebsiteFormData.url
+                    };
+                    ipcRenderer.send('save-website', this.addWebsiteFormData.classId, website);
+                }
+            });
+            console.log(this.addWebsiteFormData);
+        },
+        saveWebsiteSuccess(websites) {
+            this.websiteList = websites;
+            this.$refs.addWebsiteForm.resetFields();
+            this.$refs.addWebsiteForm.clearValidate();
+            this.addWebsiteDialogVisible = false;
+            this.$message({
+                type: 'success',
+                message: '添加成功',
+                center: true
+            });
+        },
     },
-    mounted() {},
+    mounted() {
+        ipcRenderer.send('get-websites');
+        ipcRenderer.on('get-websites', (event, websites) => {
+            this.websiteList = websites;
+            console.log(this.websiteList);
+        })
+        
+        ipcRenderer.on('upload-website-icon-success', (event, path) => {
+            this.addWebsiteFormData.icon = path;
+            console.log(this.addWebsiteFormData);
+        })
+        ipcRenderer.on('save-website-class-success', (event, websites) => {
+            this.saveWebsiteClassSuccess(websites);
+        })
+        ipcRenderer.on('save-website-success', (event, websites) => {
+            this.saveWebsiteSuccess(websites);
+        })
+    },
 }
 </script>
 

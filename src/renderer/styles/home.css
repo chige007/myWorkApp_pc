@@ -4,6 +4,7 @@
 }
 #home-page .header {
   line-height: 60px;
+  box-shadow: 0px 1px 2px #ddd;
 }
 #home-page .header .logo {
   display: inline-block;
@@ -11,6 +12,8 @@
 #home-page .header .logo img {
   vertical-align: middle;
   top: -3px;
+  width: 35px;
+  height: 35px;
 }
 #home-page .header .logo span {
   display: inline-block;
@@ -25,22 +28,28 @@
 }
 #home-page .websiteClassList .websiteClass {
   margin-bottom: 20px;
+  border-bottom: 1px dashed #ddd;
 }
 #home-page .websiteClassList .websiteClass .title {
   color: #444;
   font-size: 16px;
+  height: 40px;
+  line-height: 40px;
 }
-#home-page .websiteClassList .websiteClass .title i {
+#home-page .websiteClassList .websiteClass .title .icon {
   margin-right: 4px;
-  font-size: 18px;
+  font-size: 20px;
   color: #409EFF;
+}
+#home-page .websiteClassList .websiteClass .title .optBts {
+  float: right;
 }
 #home-page .websiteClassList .websiteClass .websiteList {
   padding: 20px 0px;
 }
 #home-page .websiteClassList .websiteClass .websiteList .website {
   text-align: center;
-  padding: 15px 0px;
+  padding: 15px 10px;
 }
 #home-page .websiteClassList .websiteClass .websiteList .website .icon {
   width: 50px;
@@ -63,7 +72,7 @@
   transform: translateY(-4px);
 }
 #home-page .websiteClassList .websiteClass .websiteList .website:hover p {
-  color: #444;
+  color: #409EFF;
 }
 #home-page .websiteClassList .websiteClass .websiteList .website-addBtn-wrap {
   padding: 15px 0px;
@@ -95,6 +104,10 @@
   color: #666;
   border: 1px dashed #ccc;
   border-radius: 4px;
+}
+#home-page .myUploadBtn img {
+  height: 100%;
+  width: 100%;
 }
 #home-page .myUploadBtn:hover {
   color: #409EFF;
