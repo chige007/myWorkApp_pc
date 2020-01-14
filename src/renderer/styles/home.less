@@ -1,0 +1,104 @@
+@primary: #409EFF;
+#home-page{
+    width: 100%;
+    height: 100%;
+    .header{
+        line-height: 60px;
+        .logo{
+            display: inline-block;
+            img{
+                vertical-align: middle;
+                top: -3px;
+            }
+            span{
+                display: inline-block;
+                font-size: 22px;
+                color: #444;
+            }
+        }
+        .header-btns{
+            float: right;
+        }
+    }
+    .websiteClassList{
+        padding: 20px 0px;
+        .websiteClass{
+            margin-bottom: 20px;
+            .title{
+                color: #444;
+                font-size: 16px;
+                i{
+                    margin-right: 4px;
+                    font-size: 18px;
+                    color: @primary;
+                }
+            }
+            .websiteList{
+                padding: 20px 0px;
+                .website{
+                    text-align: center;
+                    padding: 15px 0px;
+                    .icon{
+                        width: 50px;
+                        height: 50px;
+                        border-radius: 100px;
+                        margin-bottom: 5px;
+                        transition: all 0.4s;
+                    }
+                    p{
+                        color: #666;
+                        font-size: 14px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+                    &:hover{
+                        cursor: pointer;
+                        .icon{
+                            transform: translateY(-4px);
+                        }
+                        p{
+                            color: #444;
+                        }
+                    }
+                }
+                .website-addBtn-wrap{
+                    padding: 15px 0px;
+                    text-align: center;
+                    .website-addBtn{
+                        width: 75px;
+                        height: 75px;
+                        border-radius: 5px;
+                        border: 1px dashed #ccc;
+                        text-align: center;
+                        line-height: 75px;
+                        font-size: 24px;
+                        color: #666;
+                        display: inline-block;
+                        transition: all 0.4s;
+                        &:hover{
+                            color: @primary;
+                            border-color: @primary;
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .myUploadBtn{
+        height: 60px;
+        width: 60px;
+        text-align: center;
+        line-height: 60px;
+        font-size: 20px;
+        color: #666;
+        border: 1px dashed #ccc;
+        border-radius: 4px;
+        &:hover{
+            color: @primary;
+            border-color: @primary;
+            cursor: pointer;
+        }
+    }
+}

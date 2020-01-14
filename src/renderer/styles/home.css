@@ -1,0 +1,103 @@
+#home-page {
+  width: 100%;
+  height: 100%;
+}
+#home-page .header {
+  line-height: 60px;
+}
+#home-page .header .logo {
+  display: inline-block;
+}
+#home-page .header .logo img {
+  vertical-align: middle;
+  top: -3px;
+}
+#home-page .header .logo span {
+  display: inline-block;
+  font-size: 22px;
+  color: #444;
+}
+#home-page .header .header-btns {
+  float: right;
+}
+#home-page .websiteClassList {
+  padding: 20px 0px;
+}
+#home-page .websiteClassList .websiteClass {
+  margin-bottom: 20px;
+}
+#home-page .websiteClassList .websiteClass .title {
+  color: #444;
+  font-size: 16px;
+}
+#home-page .websiteClassList .websiteClass .title i {
+  margin-right: 4px;
+  font-size: 18px;
+  color: #409EFF;
+}
+#home-page .websiteClassList .websiteClass .websiteList {
+  padding: 20px 0px;
+}
+#home-page .websiteClassList .websiteClass .websiteList .website {
+  text-align: center;
+  padding: 15px 0px;
+}
+#home-page .websiteClassList .websiteClass .websiteList .website .icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 100px;
+  margin-bottom: 5px;
+  transition: all 0.4s;
+}
+#home-page .websiteClassList .websiteClass .websiteList .website p {
+  color: #666;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#home-page .websiteClassList .websiteClass .websiteList .website:hover {
+  cursor: pointer;
+}
+#home-page .websiteClassList .websiteClass .websiteList .website:hover .icon {
+  transform: translateY(-4px);
+}
+#home-page .websiteClassList .websiteClass .websiteList .website:hover p {
+  color: #444;
+}
+#home-page .websiteClassList .websiteClass .websiteList .website-addBtn-wrap {
+  padding: 15px 0px;
+  text-align: center;
+}
+#home-page .websiteClassList .websiteClass .websiteList .website-addBtn-wrap .website-addBtn {
+  width: 75px;
+  height: 75px;
+  border-radius: 5px;
+  border: 1px dashed #ccc;
+  text-align: center;
+  line-height: 75px;
+  font-size: 24px;
+  color: #666;
+  display: inline-block;
+  transition: all 0.4s;
+}
+#home-page .websiteClassList .websiteClass .websiteList .website-addBtn-wrap .website-addBtn:hover {
+  color: #409EFF;
+  border-color: #409EFF;
+  cursor: pointer;
+}
+#home-page .myUploadBtn {
+  height: 60px;
+  width: 60px;
+  text-align: center;
+  line-height: 60px;
+  font-size: 20px;
+  color: #666;
+  border: 1px dashed #ccc;
+  border-radius: 4px;
+}
+#home-page .myUploadBtn:hover {
+  color: #409EFF;
+  border-color: #409EFF;
+  cursor: pointer;
+}
