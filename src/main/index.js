@@ -40,23 +40,42 @@ function createWindow() {
   init();
 }
 
-function init () {
+function init() {
+  // 获取所有网站信息
   ipcMain.on('get-websites', (event, websiteClass) => {
     let websites = store.get('websites')
     event.sender.send('get-websites', websites);
   })
-
+  // 保存网站分类
   ipcMain.on('save-website-class', (event, websiteClass) => {
     let websites = store.get('websites')
     if (!websites) {
       websites = [websiteClass]
-    } else {
-      websites.push(websiteClass)
+    } else { // 新增第一个类
+      let index = websites.findIndex(item => {
+        return item.id === websiteClass.id;
+      })
+      if (index != -1) {// 修改类名
+        websites[index]['name'] = websiteClass.name;
+      } else { // 新增类
+        websites.push(websiteClass)
+      }
     }
     store.set('websites', websites)
     event.sender.send('save-website-class-success', websites);
   })
-
+  ipcMain.on('remove-website-class', (event, id) => {
+    let websites = store.get('websites')
+    let index = websites.findIndex(item => {
+      return item.id === id;
+    })
+    if (index != -1) {
+      websites.splice(index, 1);
+      store.set('websites', websites)
+      event.sender.send('remove-website-class-success', websites);
+    }
+  });
+  // 上传网站图标
   ipcMain.on('upload-website-icon', (event) => {
     dialog.showOpenDialog({
       properties: ['openFile'],
@@ -68,15 +87,33 @@ function init () {
       event.sender.send('upload-website-icon-success', path);
     })
   })
-
+  // 保存网站信息
   ipcMain.on('save-website', (event, classId, website) => {
     let websites = store.get('websites')
     let myWebsiteClass = websites.find(item => {
       return item.id === classId
     })
-    myWebsiteClass.websites.push(website)
+    let index = myWebsiteClass.websites.findIndex(item => item.id == website.id)
+    if (index == -1) {
+      myWebsiteClass.websites.push(website)
+    } else {
+      myWebsiteClass.websites[index] = website 
+    }
     store.set('websites', websites)
     event.sender.send('save-website-success', websites)
+  })
+  // 删除网站信息
+  ipcMain.on('remove-website', (event, classId, websiteId) => {
+    let websites = store.get('websites')
+    let removeWebsiteClassIndex = websites.findIndex(item => item.id == classId);
+    if (removeWebsiteClassIndex != -1) {
+      let removeWebsiteIndex = websites[removeWebsiteClassIndex]['websites'].findIndex(item => item.id == websiteId);
+      if (removeWebsiteIndex != -1) {
+        websites[removeWebsiteClassIndex]['websites'].splice(removeWebsiteIndex, 1);
+        store.set('websites', websites)
+        event.sender.send('remove-website-success', websites)
+      }
+    }
   })
 }
 
