@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, dialog } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog, shell } from 'electron'
 const Store = require('electron-store');
 const store = new Store();
 
@@ -22,8 +22,9 @@ function createWindow() {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    height: 600,
-    width: 1000,
+    // fullscreen: true,
+    height: 650,
+    width: 1200,
     useContentSize: true,
     minWidth: 750,
     webPreferences: {
@@ -39,7 +40,7 @@ function createWindow() {
 
   init();
 }
-
+// 初始化事件
 function init() {
   // 获取所有网站信息
   ipcMain.on('get-websites', (event, websiteClass) => {
@@ -64,12 +65,13 @@ function init() {
     store.set('websites', websites)
     event.sender.send('save-website-class-success', websites);
   })
+  // 删除网站分类事件
   ipcMain.on('remove-website-class', (event, id) => {
     let websites = store.get('websites')
     let index = websites.findIndex(item => {
       return item.id === id;
     })
-    if (index != -1) {
+    if (index != -1) { // 删除网站分类
       websites.splice(index, 1);
       store.set('websites', websites)
       event.sender.send('remove-website-class-success', websites);
@@ -94,10 +96,10 @@ function init() {
       return item.id === classId
     })
     let index = myWebsiteClass.websites.findIndex(item => item.id == website.id)
-    if (index == -1) {
+    if (index == -1) { // 新增网站
       myWebsiteClass.websites.push(website)
-    } else {
-      myWebsiteClass.websites[index] = website 
+    } else { // 修改网站
+      myWebsiteClass.websites[index] = website
     }
     store.set('websites', websites)
     event.sender.send('save-website-success', websites)
@@ -106,14 +108,18 @@ function init() {
   ipcMain.on('remove-website', (event, classId, websiteId) => {
     let websites = store.get('websites')
     let removeWebsiteClassIndex = websites.findIndex(item => item.id == classId);
-    if (removeWebsiteClassIndex != -1) {
+    if (removeWebsiteClassIndex != -1) { // 找到所属分类的索引
       let removeWebsiteIndex = websites[removeWebsiteClassIndex]['websites'].findIndex(item => item.id == websiteId);
-      if (removeWebsiteIndex != -1) {
+      if (removeWebsiteIndex != -1) { // 找到要删除的网站索引
         websites[removeWebsiteClassIndex]['websites'].splice(removeWebsiteIndex, 1);
         store.set('websites', websites)
         event.sender.send('remove-website-success', websites)
       }
     }
+  })
+  // 打开网页
+  ipcMain.on('open-web', (event, url) => {
+    shell.openExternal(url);
   })
 }
 

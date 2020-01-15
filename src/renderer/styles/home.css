@@ -95,6 +95,9 @@
   border-color: #409EFF;
   cursor: pointer;
 }
+#home-page .websiteClassList .websiteClass .websiteList .websiteOptBtns i {
+  font-size: 20px;
+}
 #home-page .myUploadBtn {
   height: 60px;
   width: 60px;
