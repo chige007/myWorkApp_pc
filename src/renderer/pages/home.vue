@@ -44,11 +44,11 @@
                         </div>
                         <el-row class="websiteList">
                             <el-col
-                                :xs="8"
+                                :xs="6"
                                 :sm="6"
                                 :md="4"
-                                :lg="3"
-                                :xl="2"
+                                :lg="4"
+                                :xl="3"
                                 class="website"
                                 v-for="(y, index_y) in x.websites"
                                 :key="index_y">
@@ -66,11 +66,11 @@
                                 </el-popover>
                             </el-col>
                             <el-col
-                                :xs="8"
+                                :xs="6"
                                 :sm="6"
                                 :md="4"
-                                :lg="3"
-                                :xl="2"
+                                :lg="4"
+                                :xl="3"
                                 class="website-addBtn-wrap">
                                 <div class="website-addBtn" @click="openWebsiteDialog(x.id)">
                                     <i class="el-icon-plus"></i>
@@ -81,8 +81,11 @@
                 </div>
             </el-main>
             <el-aside width="300px" style="padding: 20px 20px 20px 0px;">
-                <div id="tomatoClock">
-
+                <div class="tomatoClock">
+                    <el-progress type="circle" :percentage="tomatoClock.percentage" :show-text="false" :width="180" :status="tomatoClock.status">
+                    </el-progress>
+                    <p class="tips">{{tomatoClock.text}}</p>
+                    <el-button v-show="!tomatoClock.isStart" type="primary" size="medium" @click="tomatoStart">开始工作</el-button>
                 </div>
             </el-aside>
         </el-container>
@@ -144,6 +147,7 @@ import {
     ipcRenderer
 } from 'electron'
 import uuidv1 from 'uuid/v1'
+import Timer from 'timer.js'
 export default {
     props: {},
     computed: {},
@@ -183,7 +187,14 @@ export default {
                 url: '',
             },
 
-            websiteList: []
+            websiteList: [],
+
+            tomatoClock: {
+                isStart: false,
+                percentage: 100,
+                text: '我的番茄钟',
+                status: null
+            }
         }
     },
     components: {},
@@ -276,6 +287,29 @@ export default {
         // 打开网站
         openWeb (url) {
             ipcRenderer.send('open-web', url);
+        },
+
+        tomatoStart () {
+            this.tomatoClock.isStart = true;
+            this.tomatoClock.status = 'exception';
+            let min = 1;
+            let timer = new Timer({
+                tick: 1,
+                ontick: (sec) => {
+                    let s = (sec / 1000).toFixed(0);
+                    let ss = s % 60;
+                    let mm = Math.floor(s / 60);
+                    this.tomatoClock.percentage = s / (60 * min) * 100;
+                    this.tomatoClock.text = `${mm} : ${ss}`;
+                },
+                onend: async () => {
+                    this.tomatoClock.percentage = 0;
+                    this.tomatoClock.text = '00 : 00';
+                    let result = await ipcRenderer.invoke('notification-goto-rest');
+                    // this.tomatoClock.isStart = false;
+                }
+            })
+            timer.start(60 * min);
         }
     },
     mounted() {

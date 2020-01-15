@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, dialog, shell } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog, shell, Notification } from 'electron'
 const Store = require('electron-store');
 const store = new Store();
 
@@ -120,6 +120,24 @@ function init() {
   // 打开网页
   ipcMain.on('open-web', (event, url) => {
     shell.openExternal(url);
+  })
+  // 番茄钟-休息
+  ipcMain.handle('notification-goto-rest', async event => {
+    let result = await new Promise((resolve, reject) => {
+      let notification = new Notification({
+        title: '工作结束',
+        body: '是否开始休息？',
+        actions: [{text: '开始休息', type: 'button'}],
+        closeButtonText: '继续工作'
+      })
+      notification.show();
+      notification.on('action', () => {
+        resolve('rest');
+      })
+      notification.on('close', () => {
+        resolve('work');
+      })
+    })
   })
 }
 
