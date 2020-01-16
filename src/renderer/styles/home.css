@@ -28,20 +28,20 @@
 }
 #home-page .websiteClassList .websiteClass {
   margin-bottom: 20px;
-  border-bottom: 1px dashed #ddd;
+  border-bottom: 1px dashed #d7d7d7;
 }
-#home-page .websiteClassList .websiteClass .title {
+#home-page .websiteClassList .websiteClass .websiteClassTitle {
   color: #444;
   font-size: 16px;
   height: 40px;
   line-height: 40px;
 }
-#home-page .websiteClassList .websiteClass .title .icon {
+#home-page .websiteClassList .websiteClass .websiteClassTitle .icon {
   margin-right: 4px;
   font-size: 20px;
   color: #409EFF;
 }
-#home-page .websiteClassList .websiteClass .title .optBts {
+#home-page .websiteClassList .websiteClass .websiteClassTitle .optBts {
   float: right;
 }
 #home-page .websiteClassList .websiteClass .websiteList {
@@ -117,17 +117,34 @@
   border-color: #409EFF;
   cursor: pointer;
 }
-#home-page .tomatoClock {
-  padding: 30px 0px;
+#home-page .panelTitle {
+  height: 40px;
+  line-height: 40px;
+  margin-bottom: 10px;
+  text-align: left;
+}
+#home-page .panelTitle > i {
+  display: inline-block;
+  font-size: 22px;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+#home-page .panelTitle span {
+  font-size: 17px;
+  display: inline-block;
+  vertical-align: middle;
+}
+#home-page .panelTitle .optBtns {
+  float: right;
+}
+#home-page .panelTitle .optBtns i {
+  font-size: 14px;
+}
+#home-page .noData {
+  color: #aaa;
+  padding: 15px;
+  border: 1px dashed #d7d7d7;
+  font-size: 14px;
   text-align: center;
-}
-#home-page .tomatoClock .tips {
-  position: absolute;
-  top: 110px;
-  left: 0px;
-  right: 0px;
-  margin: auto;
-}
-#home-page .tomatoClock .el-button {
-  margin-top: 10px;
+  border-radius: 10px;
 }

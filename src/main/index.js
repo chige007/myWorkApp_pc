@@ -85,8 +85,8 @@ function init() {
         name: 'Images',
         extensions: ['jpg', 'png', 'gif', 'jpeg']
       }]
-    }, path => {
-      event.sender.send('upload-website-icon-success', path);
+    }).then(result => {
+        event.sender.send('upload-website-icon-success', result.filePaths);
     })
   })
   // 保存网站信息
@@ -121,12 +121,12 @@ function init() {
   ipcMain.on('open-web', (event, url) => {
     shell.openExternal(url);
   })
-  // 番茄钟-休息
-  ipcMain.handle('notification-goto-rest', async event => {
-    let result = await new Promise((resolve, reject) => {
+  // 番茄钟-提醒休息
+  ipcMain.handle('notification-goto-rest', async () => {
+    let res = await new Promise((resolve, reject) => {
       let notification = new Notification({
         title: '工作结束',
-        body: '是否开始休息？',
+        body: '辛苦了，请您休息一下吧',
         actions: [{text: '开始休息', type: 'button'}],
         closeButtonText: '继续工作'
       })
@@ -138,6 +138,26 @@ function init() {
         resolve('work');
       })
     })
+    return res;
+  })
+  // 番茄钟-提醒工作
+  ipcMain.handle('notification-goto-work', async () => {
+    let res = await new Promise((resolve, reject) => {
+      let notification = new Notification({
+        title: '休息结束',
+        body: '继续为理想奋斗吧！',
+        actions: [{text: '开始工作', type: 'button'}],
+        closeButtonText: '继续休息'
+      })
+      notification.show();
+      notification.on('action', () => {
+        resolve('work');
+      })
+      notification.on('close', () => {
+        resolve('rest');
+      })
+    })
+    return res;
   })
 }
 

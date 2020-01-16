@@ -2,17 +2,13 @@
 <div id="home-page">
     <el-container style="height: 100%;">
         <el-header class="header" height="80">
-            <div class="logo">
-                <img src="./../assets/logo.png" alt="logo">
-                <span>我的工作空间</span>
-            </div>
-            <div class="header-btns">
-                <el-button type="primary" size="mini">注册</el-button>
-                <el-button size="mini">登录</el-button>
-            </div>
+            <my-header></my-header>
         </el-header>
-        <el-container>
-            <el-main>
+        <el-container style="height: 100%">
+            <el-main style="height: 100%">
+                <div class="panelTitle">
+                    <i class="el-icon-discover"></i><span>常用网站</span>
+                </div>
                 <el-button-group>
                     <el-button
                         size="medium"
@@ -21,11 +17,14 @@
                     <el-button size="medium" icon="el-icon-refresh">同步数据</el-button>
                 </el-button-group>
                 <div class="websiteClassList">
+                    <div class="noData" v-if="!websiteList || !websiteList.length">
+                        还未添加网站，赶紧添加吧
+                    </div>
                     <div
                         class="websiteClass"
                         v-for="(x, index_x) in websiteList"
                         :key="index_x">
-                        <div class="title">
+                        <div class="websiteClassTitle">
                             <i class="icon el-icon-s-flag"></i>
                             <span>{{x.name}}</span>
                             <div class="optBts">
@@ -60,7 +59,7 @@
                                     </div>
                                     <div slot="reference" @click="openWeb(y.url)">
                                         <!-- <img class="icon" :src="y.icon ? 'file://' + y.icon : './../assets/logo.png'" alt="icon"> -->
-                                        <img class="icon" src="./../assets/logo.png" alt="icon">
+                                        <img class="icon" :src="y.icon" alt="icon" @error="$event.target.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC0AAAAtCAMAAAANxBKoAAAA1VBMVEUAAABG7dFL28RL28RK3cVL3MVL28RL28RL28RK3MVL3cRI3sdL28RL28RL28RL2sRM28RK28RN3sVL2sRL28RL28RK3sVL2slD3slM2sNM28RL28RM28NL28RL28RL2sNM3MRL28RN3MVH38ZL28NL2sRM28QrO04ySl42anQuRVk7ion/0Fv////T9vG7o1u8pFvx/fvO9e9caHel7eLi17hEtqqRoKpBqJ59lZ7Rv49sd4XLt4E2cnh5jWu6n1b/8cz/6rf/1nKbnWeei1SNf1RRVk+KZdANAAAAJnRSTlMABZh0JlGpwbtILCH4383KsmYb7cV9NBQM89akopWQhGxXPRfnix1orbUAAAGDSURBVEjHldRnc4JAEIDhpSlgx95bsgYlMfau6f//JwX18ABPON5PLPPALHMzgL+yIolqKplSRUkpQ3CymERaUpQDbC+L/rI9YJfIIKtCgoWVKrKrKne2IuLjRMGL5RoGVfNsY+QxuLxBsZDGsNJ0mSaG13Kwgu7mb05zdKeQPbxLT16dJuju6bpLF716Si6mXo3diy5w6vgZ62RYmtdWG9M8fh9Nc7Mid5ZE6LZ2DtF8ob1bY9dkEtG0dYpbpwAE5NYogBxBy6BF0Bp0IugOtCLoZ4gh6TCkja2xazo4JAYikkaDW7PFx2JGx5FDRCgy9G77ud0xdBFyrHfvv/asd+dAoZp2sk4DhtbAYOlf64el+wAZqml/A4YuAECRamZUS7aWubUBdnFOrcK5EqfWL5oc/nr4AA/X5NivychTAkgSB5bgViwU1yHCbzMjgKt+JhCny+BJqAfgmAD+JJ4PpOlZps3qwK4Uv7NqCR4nS64HknEpASFVtFy7oTbaOa0C/v4BDvvq28qL/vsAAAAASUVORK5CYII='">
                                         <p>{{y.name}}</p>
                                     </div>
                                 </el-popover>
@@ -80,13 +79,9 @@
                     </div>
                 </div>
             </el-main>
-            <el-aside width="300px" style="padding: 20px 20px 20px 0px;">
-                <div class="tomatoClock">
-                    <el-progress type="circle" :percentage="tomatoClock.percentage" :show-text="false" :width="180" :status="tomatoClock.status">
-                    </el-progress>
-                    <p class="tips">{{tomatoClock.text}}</p>
-                    <el-button v-show="!tomatoClock.isStart" type="primary" size="medium" @click="tomatoStart">开始工作</el-button>
-                </div>
+            <el-aside width="300px" style="padding: 20px; height: 100%;">
+                <tomato-clock></tomato-clock>
+                <work-notice></work-notice>
             </el-aside>
         </el-container>
     </el-container>
@@ -147,7 +142,9 @@ import {
     ipcRenderer
 } from 'electron'
 import uuidv1 from 'uuid/v1'
-import Timer from 'timer.js'
+import tomatoClock from './../components/tomatoClock'
+import workNotice from './../components/workNotice'
+import myHeader from './../components/header'
 export default {
     props: {},
     computed: {},
@@ -187,17 +184,14 @@ export default {
                 url: '',
             },
 
-            websiteList: [],
-
-            tomatoClock: {
-                isStart: false,
-                percentage: 100,
-                text: '我的番茄钟',
-                status: null
-            }
+            websiteList: []
         }
     },
-    components: {},
+    components: {
+        tomatoClock,
+        workNotice,
+        myHeader
+    },
     watch: {},
     methods: {
         // 保存网站分类信息
@@ -287,29 +281,6 @@ export default {
         // 打开网站
         openWeb (url) {
             ipcRenderer.send('open-web', url);
-        },
-
-        tomatoStart () {
-            this.tomatoClock.isStart = true;
-            this.tomatoClock.status = 'exception';
-            let min = 1;
-            let timer = new Timer({
-                tick: 1,
-                ontick: (sec) => {
-                    let s = (sec / 1000).toFixed(0);
-                    let ss = s % 60;
-                    let mm = Math.floor(s / 60);
-                    this.tomatoClock.percentage = s / (60 * min) * 100;
-                    this.tomatoClock.text = `${mm} : ${ss}`;
-                },
-                onend: async () => {
-                    this.tomatoClock.percentage = 0;
-                    this.tomatoClock.text = '00 : 00';
-                    let result = await ipcRenderer.invoke('notification-goto-rest');
-                    // this.tomatoClock.isStart = false;
-                }
-            })
-            timer.start(60 * min);
         }
     },
     mounted() {

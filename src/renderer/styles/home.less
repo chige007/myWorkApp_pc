@@ -27,8 +27,8 @@
         padding: 20px 0px;
         .websiteClass{
             margin-bottom: 20px;
-            border-bottom: 1px dashed #ddd;
-            .title{
+            border-bottom: 1px dashed #d7d7d7;
+            .websiteClassTitle{
                 color: #444;
                 font-size: 16px;
                 height: 40px;
@@ -119,18 +119,35 @@
             cursor: pointer;
         }
     }
-    .tomatoClock{
-        padding: 30px 0px;
+    .panelTitle{
+        height: 40px;
+        line-height: 40px;
+        margin-bottom: 10px;
+        text-align: left;
+        >i{
+            display: inline-block;
+            font-size: 22px;
+            vertical-align: middle;
+            margin-right: 4px;
+        }
+        span{
+            font-size: 17px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .optBtns{
+            float: right;
+            i{
+                font-size: 14px;
+            }
+        }
+    }
+    .noData{
+        color: #aaa;
+        padding: 15px;
+        border: 1px dashed #d7d7d7;
+        font-size: 14px;
         text-align: center;
-        .tips{
-            position: absolute;
-            top: 110px;
-            left: 0px;
-            right: 0px;
-            margin: auto;
-        }
-        .el-button{
-            margin-top: 10px;
-        }
+        border-radius: 10px;
     }
 }
