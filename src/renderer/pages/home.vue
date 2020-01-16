@@ -228,7 +228,6 @@ export default {
             for (let x in this.websiteClassFormData) {
                 this.websiteClassFormData[x] = '';
             }
-            this.$refs.websiteClassForm.resetFields();
             this.$refs.websiteClassForm.clearValidate();
         },
         // 打开网站信息编辑框
@@ -241,7 +240,6 @@ export default {
             for (let x in this.websiteFormData) {
                 this.websiteFormData[x] = '';
             }
-            this.$refs.websiteForm.resetFields();
             this.$refs.websiteForm.clearValidate();
         },
         // 上传网站图标
@@ -297,7 +295,7 @@ export default {
             this.websiteClassDialogVisible = false;
             this.$message({
                 type: 'success',
-                message: '添加成功',
+                message: '保存成功',
                 center: true
             });
         })
@@ -309,7 +307,7 @@ export default {
             this.websiteDialogVisible = false;
             this.$message({
                 type: 'success',
-                message: '添加成功',
+                message: '保存成功',
                 center: true
             });
         })

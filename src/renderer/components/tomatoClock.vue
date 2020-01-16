@@ -67,7 +67,7 @@ export default {
         start() {
             this.status = 'working';
             // this.progressStatus = 'exception';
-            let min = 0.2;
+            let min = 0.1;
             let timer = new Timer({
                 tick: 1,
                 ontick: (sec) => {
@@ -92,7 +92,7 @@ export default {
         rest() {
             this.status = 'resting';
             // this.progressStatus = 'exception';
-            let min = 0.1;
+            let min = 0.05;
             let timer = new Timer({
                 tick: 1,
                 ontick: (sec) => {

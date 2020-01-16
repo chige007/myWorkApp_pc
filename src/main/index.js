@@ -43,7 +43,7 @@ function createWindow() {
 // 初始化事件
 function init() {
   // 获取所有网站信息
-  ipcMain.on('get-websites', (event, websiteClass) => {
+  ipcMain.on('get-websites', (event) => {
     let websites = store.get('websites')
     event.sender.send('get-websites', websites);
   })
@@ -159,6 +159,42 @@ function init() {
     })
     return res;
   })
+
+  // 保存工作提醒
+  ipcMain.on('save-work-notice', (event, workNotice) => {
+    let workNotices = store.get('workNotices')
+    if (!workNotices) { // 新增第一个
+        workNotices = [workNotice]
+    } else {
+      let index = workNotices.findIndex(item => {
+        return item.id === workNotice.id;
+      })
+      if (index != -1) {// 修改
+        workNotices[index] = workNotice;
+      } else { // 新增
+        workNotices.push(workNotice)
+      }
+    }
+    store.set('workNotices', workNotices)
+    event.sender.send('save-work-notice-success', workNotices);
+  })
+  // 获取所有工作提醒
+  ipcMain.on('get-work-notice', (event) => {
+    let workNotices = store.get('workNotices')
+    event.sender.send('get-work-notice', workNotices);
+  })
+  // 删除工作提醒
+  ipcMain.on('remove-work-notice', (event, id) => {
+    let workNotices = store.get('workNotices')
+    let index = workNotices.findIndex(item => {
+      return item.id === id;
+    })
+    if (index != -1) { // 删除网站分类
+        workNotices.splice(index, 1);
+      store.set('workNotices', workNotices)
+      event.sender.send('remove-work-notice-success', workNotices);
+    }
+  });
 }
 
 app.on('ready', createWindow)

@@ -1,16 +1,38 @@
+@primary: #409EFF;
 #workNotice{
     margin-top: 30px;
-    .title{
-        i{
-            display: inline-block;
-            font-size: 20px;
-            vertical-align: middle;
-            margin-right: 4px;
-        }
-        span{
-            font-size: 16px;
-            display: inline-block;
-            vertical-align: middle;
+    .workList{
+        .item{
+            padding: 8px 4px;
+            border-bottom: 1px dashed #d7d7d7;
+            .content{
+                font-size: 14px;
+                color: #444;
+                margin-bottom: 4px;
+            }
+            .time{
+                font-size: 12px;
+                color: #999;
+            }
+            .optBtn{
+                display: none;
+                position: absolute;
+                color: #999;
+                right: 0px;
+                top: 7px;
+                &.el-icon-delete{
+                    top: 28px;
+                }
+                &:hover{
+                    cursor: pointer;
+                    color: @primary
+                }
+            }
+            &:hover{
+                .optBtn{
+                    display: block;
+                }
+            }
         }
     }
 }
