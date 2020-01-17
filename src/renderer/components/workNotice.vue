@@ -7,21 +7,21 @@
                 size="small"
                 icon="el-icon-plus"
                 circle
-                @click="dialogVisible = true"></el-button>
+                @click.stop.prevent="openDialog"></el-button>
         </div>
     </div>
-    <div class="noData" v-if="!listData || !listData.length">
+    <div class="noData" v-show="!listData || !listData.length">
         暂无工作提醒
     </div>
-    <div v-if="listData.length" class="workList">
+    <div class="workList">
         <div
             class="item"
-            v-for="(x, index) in listData"
-            :key="index">
+            v-for="x in listData"
+            :key="x.id">
             <p class="content">{{x.content}}</p>
             <p class="time">{{x.date + ' ' + x.time}}</p>
-            <i class="optBtn el-icon-edit" @click="onEdit(x)"></i>
-            <i class="optBtn el-icon-delete" @click="remove(x.id)"></i>
+            <i class="optBtn el-icon-edit" @click.stop.prevent="onEdit(x)"></i>
+            <i class="optBtn el-icon-delete" @click.stop.prevent="remove(x.id)"></i>
         </div>
     </div>
     <el-dialog
@@ -64,8 +64,8 @@
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="save">确 定</el-button>
+            <el-button @click.stop.prevent="dialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click.stop.prevent="save">确 定</el-button>
         </div>
     </el-dialog>
 </div>
@@ -111,6 +111,9 @@ export default {
     components: {},
     watch: {},
     methods: {
+        openDialog() {
+            this.dialogVisible = true;
+        },
         closeDialog() {
             for (let x in this.formData) {
                 this.formData[x] = '';
@@ -133,7 +136,7 @@ export default {
         },
         onEdit(workNotice) {
             this.formData = Object.assign({}, workNotice);
-            this.dialogVisible = true;
+            this.openDialog();
         },
         remove(id) {
             this.$confirm('此操作将永久删除工作提醒, 是否继续?', '提示', {

@@ -13,7 +13,7 @@
                     <el-button
                         size="medium"
                         icon="el-icon-plus"
-                        @click="websiteClassDialogVisible = true">新增分类</el-button>
+                        @click.stop.prevent="websiteClassDialogVisible = true">新增分类</el-button>
                     <el-button size="medium" icon="el-icon-refresh">同步数据</el-button>
                 </el-button-group>
                 <div class="websiteClassList">
@@ -22,8 +22,8 @@
                     </div>
                     <div
                         class="websiteClass"
-                        v-for="(x, index_x) in websiteList"
-                        :key="index_x">
+                        v-for="x in websiteList"
+                        :key="x.id">
                         <div class="websiteClassTitle">
                             <i class="icon el-icon-s-flag"></i>
                             <span>{{x.name}}</span>
@@ -32,13 +32,13 @@
                                     size="small"
                                     icon="el-icon-edit"
                                     circle
-                                    @click="editWebsiteClassName(x.id, x.name)"></el-button>
+                                    @click.stop.prevent="editWebsiteClassName(x.id, x.name)"></el-button>
                                 <el-button
                                     size="small"
                                     icon="el-icon-delete"
                                     slot="reference"
                                     circle
-                                    @click="removeWebsiteClass(x.id)"></el-button>
+                                    @click.stop.prevent="removeWebsiteClass(x.id)"></el-button>
                             </div>
                         </div>
                         <el-row class="websiteList">
@@ -49,15 +49,15 @@
                                 :lg="4"
                                 :xl="3"
                                 class="website"
-                                v-for="(y, index_y) in x.websites"
-                                :key="index_y">
+                                v-for="y in x.websites"
+                                :key="y.id">
                                 <el-popover placement="top" trigger="hover">
                                     <div style="text-align: center;" class="websiteOptBtns">
-                                        <el-button type="text" @click="openWeb(y.url)"><i class="el-icon-search"></i></el-button>
-                                        <el-button type="text" @click="editWebsite(x.id, y)"><i class="el-icon-edit"></i></el-button>
-                                        <el-button type="text" @click="removeWebsite(x.id, y.id)"><i class="el-icon-delete"></i></el-button>
+                                        <el-button type="text" @click.stop.prevent="openWeb(y.url)"><i class="el-icon-search"></i></el-button>
+                                        <el-button type="text" @click.stop.prevent="editWebsite(x.id, y)"><i class="el-icon-edit"></i></el-button>
+                                        <el-button type="text" @click.stop.prevent="removeWebsite(x.id, y.id)"><i class="el-icon-delete"></i></el-button>
                                     </div>
-                                    <div slot="reference" @click="openWeb(y.url)">
+                                    <div slot="reference" @click.stop.prevent="openWeb(y.url)">
                                         <!-- <img class="icon" :src="y.icon ? 'file://' + y.icon : './../assets/logo.png'" alt="icon"> -->
                                         <img class="icon" :src="y.icon" alt="icon" @error="$event.target.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC0AAAAtCAMAAAANxBKoAAAA1VBMVEUAAABG7dFL28RL28RK3cVL3MVL28RL28RL28RK3MVL3cRI3sdL28RL28RL28RL2sRM28RK28RN3sVL2sRL28RL28RK3sVL2slD3slM2sNM28RL28RM28NL28RL28RL2sNM3MRL28RN3MVH38ZL28NL2sRM28QrO04ySl42anQuRVk7ion/0Fv////T9vG7o1u8pFvx/fvO9e9caHel7eLi17hEtqqRoKpBqJ59lZ7Rv49sd4XLt4E2cnh5jWu6n1b/8cz/6rf/1nKbnWeei1SNf1RRVk+KZdANAAAAJnRSTlMABZh0JlGpwbtILCH4383KsmYb7cV9NBQM89akopWQhGxXPRfnix1orbUAAAGDSURBVEjHldRnc4JAEIDhpSlgx95bsgYlMfau6f//JwX18ABPON5PLPPALHMzgL+yIolqKplSRUkpQ3CymERaUpQDbC+L/rI9YJfIIKtCgoWVKrKrKne2IuLjRMGL5RoGVfNsY+QxuLxBsZDGsNJ0mSaG13Kwgu7mb05zdKeQPbxLT16dJuju6bpLF716Si6mXo3diy5w6vgZ62RYmtdWG9M8fh9Nc7Mid5ZE6LZ2DtF8ob1bY9dkEtG0dYpbpwAE5NYogBxBy6BF0Bp0IugOtCLoZ4gh6TCkja2xazo4JAYikkaDW7PFx2JGx5FDRCgy9G77ud0xdBFyrHfvv/asd+dAoZp2sk4DhtbAYOlf64el+wAZqml/A4YuAECRamZUS7aWubUBdnFOrcK5EqfWL5oc/nr4AA/X5NivychTAkgSB5bgViwU1yHCbzMjgKt+JhCny+BJqAfgmAD+JJ4PpOlZps3qwK4Uv7NqCR4nS64HknEpASFVtFy7oTbaOa0C/v4BDvvq28qL/vsAAAAASUVORK5CYII='">
                                         <p>{{y.name}}</p>
@@ -71,12 +71,18 @@
                                 :lg="4"
                                 :xl="3"
                                 class="website-addBtn-wrap">
-                                <div class="website-addBtn" @click="openWebsiteDialog(x.id)">
+                                <div class="website-addBtn" @click.stop.prevent="openWebsiteDialog(x.id)">
                                     <i class="el-icon-plus"></i>
                                 </div>
                             </el-col>
                         </el-row>
                     </div>
+                </div>
+                <div class="panelTitle">
+                    <i class="el-icon-discover"></i><span>常用文件目录</span>
+                </div>
+                <div>
+                    <span @click.stop.prevent="openFilePath('/private/var/root/Desktop/信息管理部/中盈业务系统/图片/LOGO')" style="color: #666; font-size: 14px; margin: 10px; cursor: pointer">公司LOGO</span>
                 </div>
             </el-main>
             <el-aside width="300px" style="padding: 20px; height: 100%;">
@@ -100,8 +106,8 @@
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="websiteClassDialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="saveWebsiteClass">确 定</el-button>
+            <el-button @click.stop.prevent="websiteClassDialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click.stop.prevent="saveWebsiteClass">确 定</el-button>
         </div>
     </el-dialog>
 
@@ -117,7 +123,7 @@
             :rules="websiteFormRules"
             :model="websiteFormData">
             <el-form-item label="图标：" prop="icon">
-                <div class="myUploadBtn" @click="uploadWebsiteIcon">
+                <div class="myUploadBtn" @click.stop.prevent="uploadWebsiteIcon">
                     <i v-if="!websiteFormData.icon" class="el-icon-upload"></i>
                     <img v-else :src="'file://' + websiteFormData.icon" alt="icon">
                 </div>
@@ -130,8 +136,8 @@
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="websiteDialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="saveWebsite">确 定</el-button>
+            <el-button @click.stop.prevent="websiteDialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click.stop.prevent="saveWebsite">确 定</el-button>
         </div>
     </el-dialog>
 </div>
@@ -279,6 +285,9 @@ export default {
         // 打开网站
         openWeb (url) {
             ipcRenderer.send('open-web', url);
+        },
+        openFilePath(path) {
+            ipcRenderer.send('open-file-path', path);
         }
     },
     mounted() {

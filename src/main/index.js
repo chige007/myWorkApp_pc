@@ -121,10 +121,13 @@ function init() {
   ipcMain.on('open-web', (event, url) => {
     shell.openExternal(url);
   })
+  // 打开目录
+  ipcMain.on('open-file-path', (event, path) => {
+    shell.showItemInFolder(path);
+  })
   // 番茄钟-提醒休息
-  ipcMain.handle('notification-goto-rest', async () => {
-    let res = await new Promise((resolve, reject) => {
-      let notification = new Notification({
+  ipcMain.on('notification-goto-rest', (event) => {
+    let notification = new Notification({
         title: '工作结束',
         body: '辛苦了，请您休息一下吧',
         actions: [{text: '开始休息', type: 'button'}],
@@ -132,17 +135,32 @@ function init() {
       })
       notification.show();
       notification.on('action', () => {
-        resolve('rest');
+        // resolve('rest');
       })
       notification.on('close', () => {
-        resolve('work');
+        // resolve('work');
       })
-    })
-    return res;
   })
+//   ipcMain.handle('notification-goto-rest', async () => {
+//     let res = await new Promise((resolve, reject) => {
+//       let notification = new Notification({
+//         title: '工作结束',
+//         body: '辛苦了，请您休息一下吧',
+//         actions: [{text: '开始休息', type: 'button'}],
+//         closeButtonText: '继续工作'
+//       })
+//       notification.show();
+//       notification.on('action', () => {
+//         resolve('rest');
+//       })
+//       notification.on('close', () => {
+//         resolve('work');
+//       })
+//     })
+//     return res;
+//   })
   // 番茄钟-提醒工作
-  ipcMain.handle('notification-goto-work', async () => {
-    let res = await new Promise((resolve, reject) => {
+  ipcMain.on('notification-goto-work', (event) => {
       let notification = new Notification({
         title: '休息结束',
         body: '继续为理想奋斗吧！',
@@ -151,14 +169,30 @@ function init() {
       })
       notification.show();
       notification.on('action', () => {
-        resolve('work');
+        // resolve('work');
       })
       notification.on('close', () => {
-        resolve('rest');
+        // resolve('rest');
       })
-    })
-    return res;
   })
+//   ipcMain.handle('notification-goto-work', async () => {
+//     let res = await new Promise((resolve, reject) => {
+//       let notification = new Notification({
+//         title: '休息结束',
+//         body: '继续为理想奋斗吧！',
+//         actions: [{text: '开始工作', type: 'button'}],
+//         closeButtonText: '继续休息'
+//       })
+//       notification.show();
+//       notification.on('action', () => {
+//         resolve('work');
+//       })
+//       notification.on('close', () => {
+//         resolve('rest');
+//       })
+//     })
+//     return res;
+//   })
 
   // 保存工作提醒
   ipcMain.on('save-work-notice', (event, workNotice) => {

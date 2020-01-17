@@ -16,12 +16,12 @@
         v-show="status == 'readyToWork'"
         type="primary"
         size="medium"
-        @click="start">开始工作</el-button>
+        @click.stop.prevent="start">开始工作</el-button>
     <el-button
         v-show="status == 'readyToRest'"
         type="primary"
         size="medium"
-        @click="rest">开始休息</el-button>
+        @click.stop.prevent="rest">开始休息</el-button>
 </div>
 </template>
 
@@ -84,7 +84,8 @@ export default {
                     this.percentage = 100;
                     this.status = 'readyToRest';
                     this.text = '工作结束';
-                    let result = await ipcRenderer.invoke('notification-goto-rest');
+                    ipcRenderer.send('notification-goto-rest');
+                    // let result = await ipcRenderer.invoke('notification-goto-rest');
                 }
             })
             timer.start(60 * min);
@@ -107,7 +108,8 @@ export default {
                     this.percentage = 100;
                     this.status = 'readyToWork';
                     this.text = '休息结束';
-                    let result = await ipcRenderer.invoke('notification-goto-work');
+                    ipcRenderer.send('notification-goto-work');
+                    // let result = await ipcRenderer.invoke('notification-goto-work');
                 }
             })
             timer.start(60 * min);
