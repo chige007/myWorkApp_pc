@@ -51,7 +51,7 @@
     }
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "electron-store": "^5.1.0",
     "element-ui": "^2.13.0",
     "timer.js": "^1.0.4",
